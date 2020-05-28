@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>张涛的博客</title>
+    <style type="text/css">
+        h1 {
+            text-align: center;
+            padding-bottom: 5%;
+        }
+        
+        pre {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+
+<body>
+	<div class="container">
+        <div class="row">
+            <div class="jumbotron col-12 " style="text-align: center; background: #ffffff;">
+                <h1 class="display-4">张涛的博客</h1>
+                <p class="lead">Record every day's progress</p>
+                <hr class="my-4">
+                <p></p>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!--
+    title="React使用TS的步骤"
+    thumbnail=["https://tva1.sinaimg.cn/large/007S8ZIlly1gdvbiue918j31280iwwno.jpg"]
+    summary="在React中集成Typescript和Material UI的步骤。 适合新手，不适合老鸟"
+-->
+
+<h1>React使用TS的步骤</h1>
+
+<blockquote>
+<p>个人亲测可用 脚手架地址: <a href="https://github.com/andy-zhangtao/react-ts.git">https://github.com/andy-zhangtao/react-ts.git</a></p>
+</blockquote>
+
+<h2>前置工具</h2>
+
+<ul>
+<li>node</li>
+<li>npm</li>
+<li>yarn</li>
+</ul>
+
+<h2>安装<code>create-react-app</code></h2>
+
+<pre><code>npm install -g create-react-app
+</code></pre>
+
+<h2>创建工程</h2>
+
+<pre><code>create-react-app &lt;name&gt; --template typescript
+</code></pre>
+
+<h2>安装Material UI</h2>
+
+<pre><code>yarn add @material-ui/core
+</code></pre>
+
+<h2>配置</h2>
+
+<h3>store</h3>
+
+<h4>创建rootReducer。</h4>
+
+<pre><code class="language-typescript">import { combineReducers } from 'redux';
+
+import xxxaction from './actions'
+
+const reducers = {
+    xxxactions,
+}
+export default combineReducers(reducers)
+</code></pre>
+
+<h4>创建<code>store.ts</code>文件，例如创建在<code>redux/store.ts</code>。</h4>
+
+<blockquote>
+<p>redux-devtools-extension 可以在浏览器查看每次发起的action请求</p>
+
+<pre><code class="language-typescript">import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+
+import rootReducer from './rootReducer';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+const store = createStore(rootReducer,
+    composeWithDevTools(
+        applyMiddleware(thunk)
+    )
+);
+
+export default store;
+</code></pre>
+</blockquote>
+
+<h3>主题</h3>
+
+<blockquote>
+<p>如果想使用<code>material-ui</code>提供的主题功能，参考<code>devex-ng</code>的theme目录</p>
+</blockquote>
+
+<h3>路由</h3>
+
+<p>将所有路由都定义到<code>routers.ts</code>中。</p>
+
+<pre><code class="language-typescript">// routes.ts
+// 首页重定向到dashboard页面
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+import DashBoardClass from './componts/dashboard'
+import LoginClass from './componts/login'
+import LogoutClass from './componts/logout'
+import Index from './componts/index'
+
+const routes = [
+  {
+    path: '/',
+    exact: true,
+    component: () =&gt; &lt;Redirect to=&quot;/dashboard&quot; /&gt;
+  },
+  {
+    path: '/login',
+    exact: true,
+    component: LoginClass
+  },
+  {
+    path: '/logout',
+    exact: true,
+    component: LogoutClass
+  },
+  {
+    route: '*',
+    component: Index, // 其它页面都在Index中进行渲染
+    routes: [
+      {
+        path: '/dashboard',
+        exact: true,
+        component: DashBoardClass
+      },
+    ]
+  },
+
+];
+
+export default routes;
+
+</code></pre>
+
+<h3>首页</h3>
+
+<p>Index负责集中渲染其它页面</p>
+
+<pre><code class="language-typescript">import React, { Component } from 'react';
+import { bindActionCreators, Dispatch } from 'redux'
+import { connect } from 'react-redux'
+import { withRouter, } from 'react-router-dom';
+import { History, LocationState } from 'history'
+import { RouteConfig } from 'react-router-config'
+
+import './index.css'
+import TopBar from './topbar';
+
+interface IndexPros {
+    history: History&lt;LocationState&gt;
+    route?: RouteConfig
+}
+
+class Index extends Component&lt;IndexPros, {}&gt;{
+
+    componentWillMount() {
+        // 可以判定当前用户是否需要登录
+    }
+    render() {
+        const { route } = this.props
+
+        return (
+            &lt;ConfigProvider&gt;
+                &lt;Layout &gt;
+                    &lt;TopBar route={route} /&gt;
+                &lt;/Layout&gt;
+            &lt;/ConfigProvider&gt;
+        )
+    }
+
+}
+
+const mapStateToProps = (state: any) =&gt; ({
+
+})
+const mapDispatchToProps = (dispatch: Dispatch) =&gt; bindActionCreators(
+    {},
+    dispatch
+)
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(Index))
+</code></pre>
+
+<p><code>tarbar</code>是一个菜单组件</p>
+
+<pre><code class="language-typescript">import React, { Suspense } from 'react';
+import { renderRoutes } from 'react-router-config';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import { Link as RouterLink, } from 'react-router-dom';
+import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import CallSplitIcon from '@material-ui/icons/CallSplit';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import PersonIcon from '@material-ui/icons/Person';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+import CategoryIcon from '@material-ui/icons/Category';
+import { Hidden, Link, LinearProgress, Avatar, Typography } from '@material-ui/core';
+import { getUser } from '../../utils/token';
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme: Theme) =&gt;
+    createStyles({
+        root: {
+            display: 'flex',
+        },
+        flexGrow: {
+            flexGrow: 1
+        },
+        appBar: {
+            transition: theme.transitions.create(['margin', 'width'], {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
+        },
+        appBarShift: {
+            width: `calc(100% - ${drawerWidth}px)`,
+            marginLeft: drawerWidth,
+            transition: theme.transitions.create(['margin', 'width'], {
+                easing: theme.transitions.easing.easeOut,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+        },
+        menuButton: {
+            marginRight: theme.spacing(2),
+        },
+        hide: {
+            display: 'none',
+        },
+        drawer: {
+            width: drawerWidth,
+            flexShrink: 0,
+        },
+        drawerPaper: {
+            width: drawerWidth,
+        },
+        drawerHeader: {
+            display: 'flex',
+            alignItems: 'center',
+            padding: theme.spacing(0, 1),
+            ...theme.mixins.toolbar,
+            justifyContent: 'flex-end',
+        },
+        content: {
+            flexGrow: 1,
+            padding: theme.spacing(3),
+            transition: theme.transitions.create('margin', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
+            marginLeft: -(drawerWidth / 4),
+        },
+        contentShift: {
+            transition: theme.transitions.create('margin', {
+                easing: theme.transitions.easing.easeOut,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+            marginLeft: 0,
+        },
+    }),
+);
+
+const PersistentDrawerLeft = (props: any) =&gt; {
+    const classes = useStyles();
+    const theme = useTheme();
+    const [open, setOpen] = React.useState(true);
+    const { route } = props;
+
+    const handleDrawerOpen = () =&gt; {
+        setOpen(true);
+    };
+
+    const handleDrawerClose = () =&gt; {
+        setOpen(false);
+    };
+
+    let u = Math.ceil(Math.random() * 100000)
+
+    let avatat = &quot;https://avatars1.githubusercontent.com/u/&quot;.concat(String(u))
+
+    return (
+        &lt;div className={classes.root}&gt;
+            &lt;div className=&quot;content&quot;&gt;
+            &lt;/div&gt;
+            &lt;CssBaseline /&gt;
+            &lt;AppBar
+                position=&quot;fixed&quot;
+                className={clsx(classes.appBar, {
+                    [classes.appBarShift]: open,
+                })}
+            &gt;
+                &lt;Toolbar&gt;
+                    &lt;IconButton
+                        color=&quot;inherit&quot;
+                        aria-label=&quot;open drawer&quot;
+                        onClick={handleDrawerOpen}
+                        edge=&quot;start&quot;
+                        className={clsx(classes.menuButton, open &amp;&amp; classes.hide)}
+                    &gt;
+                        &lt;MenuIcon /&gt;
+                    &lt;/IconButton&gt;
+                    &lt;RouterLink to=&quot;/dashboard&quot;&gt;
+                        &lt;img
+                            alt=&quot;Logo&quot;
+                            src=&quot;/images/logos/devex-admin.svg&quot;
+                        /&gt;
+                    &lt;/RouterLink&gt;
+                    &lt;div className={classes.flexGrow} /&gt;
+                    &lt;Hidden mdDown&gt;
+                        &lt;Link href=&quot;/logout&quot; color=&quot;inherit&quot;&gt;退出&lt;/Link&gt;
+                    &lt;/Hidden&gt;
+                &lt;/Toolbar&gt;
+            &lt;/AppBar&gt;
+            &lt;Drawer
+                className={classes.drawer}
+                variant=&quot;persistent&quot;
+                anchor=&quot;left&quot;
+                open={open}
+                classes={{
+                    paper: classes.drawerPaper,
+                }}
+            &gt;
+                &lt;div className={classes.drawerHeader}&gt;
+                    &lt;IconButton onClick={handleDrawerClose}&gt;
+                        {theme.direction === 'ltr' ? &lt;ChevronLeftIcon /&gt; : &lt;ChevronRightIcon /&gt;}
+                    &lt;/IconButton&gt;
+                &lt;/div&gt;
+                &lt;List&gt;
+                    &lt;ListItem &gt;
+
+                        &lt;Avatar
+                            alt=&quot;Author&quot;
+                            style={{
+                                marginRight: 2,
+                                backgroundColor: 'orange',
+                                width: theme.spacing(7),
+                                height: theme.spacing(7),
+                            }}
+                            src={avatat}
+                        &gt;
+
+                        &lt;/Avatar&gt;
+                        &lt;div style={{
+                            marginLeft: 40
+                        }}&gt;
+                            &lt;Typography variant=&quot;body1&quot;&gt;
+                                {getUser().toUpperCase()}
+                            &lt;/Typography&gt;
+                        &lt;/div&gt;
+
+                    &lt;/ListItem&gt;
+                &lt;/List&gt;
+                &lt;Divider /&gt;
+                &lt;List&gt;
+                    &lt;ListItem button key='dashboard' component=&quot;a&quot; href=&quot;/dashboard&quot;&gt;
+                        &lt;ListItemIcon&gt;
+                            &lt;DashboardIcon /&gt;
+                        &lt;/ListItemIcon&gt;
+                        &lt;ListItemText primary='平台总览' /&gt;
+                    &lt;/ListItem&gt;
+                &lt;/List&gt;
+                &lt;Divider /&gt;
+                &lt;List&gt;
+                    &lt;ListItem button key='user' component=&quot;a&quot; href=&quot;/user&quot;&gt;
+                        &lt;ListItemIcon&gt;
+                            &lt;PersonIcon /&gt;
+                        &lt;/ListItemIcon&gt;
+                        &lt;ListItemText primary='用户' /&gt;
+                    &lt;/ListItem&gt;
+                &lt;/List&gt;
+            &lt;/Drawer&gt;
+            &lt;main
+                className={clsx(classes.content, {
+                    [classes.contentShift]: open,
+                })}
+            &gt;
+                &lt;main className={classes.content}&gt;
+                    &lt;Suspense fallback={&lt;LinearProgress /&gt;}&gt;
+                        {renderRoutes(route.routes)}
+                    &lt;/Suspense&gt;
+                &lt;/main&gt;
+
+            &lt;/main&gt;
+        &lt;/div&gt;
+    );
+}
+
+PersistentDrawerLeft.propTypes = {
+    route: PropTypes.object
+};
+export default PersistentDrawerLeft
+</code></pre>
+
+<h3>集成</h3>
+
+<p>最后修改index.tsx，将以上元素集成一起</p>
+
+<pre><code class="language-typescript">import React from 'react';
+import ReactDOM from 'react-dom';
+import { renderRoutes } from 'react-router-config';
+import { Router } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import { Provider as StoreProvider } from 'react-redux';
+import { ThemeProvider } from '@material-ui/styles';
+import MomentUtils from '@date-io/moment';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import store from './redux/store';
+import routes from './routes';
+import theme from './theme';
+
+const history = createBrowserHistory();
+
+ReactDOM.render(
+    &lt;StoreProvider store={store}&gt;
+        &lt;ThemeProvider theme={theme}&gt;
+            &lt;MuiPickersUtilsProvider utils={MomentUtils}&gt;
+                &lt;Router history={history}&gt;
+                    {renderRoutes(routes)}
+                &lt;/Router&gt;
+            &lt;/MuiPickersUtilsProvider&gt;
+        &lt;/ThemeProvider&gt;
+    &lt;/StoreProvider&gt;,
+    document.querySelectorAll('.app')[0]
+);
+</code></pre>
+
+<p>最后工程目录结构如下:</p>
+
+<pre><code class="language-shell">.
+├── README.md
+├── package-lock.json
+├── package.json
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   ├── manifest.json
+│   └── robots.txt
+├── src
+│   ├── App.css
+│   ├── App.test.tsx
+│   ├── App.tsx
+│   ├── compoment
+│   ├── index.css
+│   ├── index.tsx
+│   ├── logo.svg
+│   ├── react-app-env.d.ts
+│   ├── redux
+│   ├── routes.js
+│   ├── serviceWorker.ts
+│   ├── setupTests.ts
+│   └── theme
+├── tsconfig.json
+└── yarn.lock
+</code></pre>
+
+<h2>注意事项</h2>
+
+<ol>
+<li><p>如果Dom创建失败，注意public/index.html中的div类型。 应该是class，而不是id</p></li>
+
+<li><p>注意依赖的版本</p></li>
+</ol>
+
+<h2>疑难问题</h2>
+
+<h3>GRPC-WEB编译报错</h3>
+
+<blockquote>
+<p>发生在使用create-react-app的场景中</p>
+</blockquote>
+
+<p>错误原因是CRA使用的ESLint规则规定TS检查失败，则构建失败。 因此需要忽略*.pb.js的eslint检查。</p>
+
+<p>创建<code>.env</code>文件，内容为：<code>EXTEND_ESLINT=true</code>。 然后再package.json中增加需要忽略的文件:</p>
+
+<pre><code class="language-json">  &quot;eslintConfig&quot;: {
+    &quot;extends&quot;: &quot;react-app&quot;,
+    &quot;ignorePatterns&quot;: [
+      &quot;**/*_pb.js&quot;
+    ]
+  },
+</code></pre>
+
+<h3><Redirect to="/dashboard" /> 找不到to</h3>
+
+<blockquote>
+<p>低级错误</p>
+</blockquote>
+
+<p>注意<code>routes</code>的后缀，不能是<code>ts/tsx</code>。 改成<code>js</code>跳过ts语法检查</p>
+
+<h3>添加新页面后, 在Index中看不到</h3>
+
+<blockquote>
+<p>有可能是被遮挡住了</p>
+</blockquote>
+
+<p>在<code>index.tsx</code>页面中，设置全局<code>padding</code>。 如下：</p>
+
+<pre><code>        return (
+            &lt;div style={{ padding: 50 }}&gt;
+                &lt;TopBar route={route} /&gt;
+            &lt;/div&gt;
+        )
+</code></pre>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>

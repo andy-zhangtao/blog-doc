@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+
+    <style type="text/css">
+        h1 {
+            text-align: center;
+            padding-bottom: 5%;
+        }
+
+        pre {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+
+    <title>张涛的博客</title>
+</head>
+
+<body style="background-color: #eeeeee;">
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div style="background-color: #000000">
+                    <div class="container">
+                        <div style="color: #ffffff; padding: 3em;">
+                            <div class="col-md-12 col-xs-12" style="text-align: center; ">
+                                <div class="card border-light text-white bg-dark" style="padding: 3em;">
+                                    <h1>张涛的博客</h1>
+                                </div>
+                                <div style="margin-top: 0.5em;">
+                                    <h4>Record every day's progress</h4>
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="container" style="margin-top: 2em;">
+            <div class="card-deck">
+                <div class="card  card-body">
+                    <!--
+    title="浅谈服务可观察性的三个指标"
+    thumbnail=["http://p1.pstatp.com/large/dfic-imagehandler/c1e60038-75fd-4e88-9b38-8b8eac1ccb00"]
+    summary="与数据可视化类似，服务可视化最终目的是要让\"人\"更容易的理解服务。 相对于让计算机理解服务，人在理解服务上面可谓是问题多多。 最难的部分就在于服务无论在哪里编写，在哪里保存。如果服务需要具备可观察性，注定需要从数据，指标和日志来做文章"
+-->
+
+<p>当论及可观察性时，不同的人往往会给予不同的反应。 更多的人会反问：什么是可观察性？ 如何定义可观察性？</p>
+
+<p>如果说服务的可观察性不容易定义，那么我们可以换个词来类比: 可视化， 即如何做到服务的可视化？</p>
+
+<p><img src="http://p1.pstatp.com/large/dfic-imagehandler/c1e60038-75fd-4e88-9b38-8b8eac1ccb00" alt="" /></p>
+
+<p>再讨论服务可视化之前，我们先来看看它的近亲：数据可视化。 每当论及数据可视化时，业界会有一些成熟的可视化模型来供我们落地使用。对这些模型进行抽象以后，我们可以发现，数据可视化的核心在于：</p>
+
+<ol>
+<li>数据。</li>
+<li>展现模型</li>
+</ol>
+
+<p>数据，指的是大量的，具备有效业务含义的数据。 这些数据可以是固定的(例如一次请求所产生的数据)或者是源源不断的数据(例如代码产生的日志数据，用户的请求数据)。并且这些数据是可以允许进行计算的(例如对用户IP数据进行聚合运算可以得出用户分布图，而对日志数据中出现的字符进行聚合运算则没有多少意义)。</p>
+
+<p>展现模型，指的是如何让&rdquo;人&rdquo;更容易理解数据的UI模型。 通俗理解就是图。例如通过折线图可以看出一批数据在某个维度上面的变化趋势，通过面积图，可以看出在这批数据中的占比分布。图是展现模型中常用的一种模型，而不是全部。 例如无法通过图来准确定位错误在代码中出现的具体位置。</p>
+
+<p>因此在谈到数据可视化时，往往可以得到下面的公式: 数据+展现模式 = 可视化。</p>
+
+<p>与数据可视化类似，服务可视化最终目的是要让&rdquo;人&rdquo;更容易的理解服务。 相对于让计算机理解服务，人在理解服务上面可谓是问题多多。 最难的部分就在于服务无论在哪里编写，在哪里保存。 最终都是运行在计算机之中，人始终无法通过CPU看到二进制是如何运转起来的。</p>
+
+<p><img src="http://p3.pstatp.com/large/dfic-imagehandler/c62c75b3-d5c2-4ad8-8d0b-46518bb635f8" alt="" /></p>
+
+<p>人为了可以透过中间的&rdquo;层层迷雾&rdquo;最近距离(只能无限靠近而不能触及)观察到二进制如何运行，就提出了服务的可观察性概念。所以服务可观察性目的仅在于解决如何近距离观察代码如何运行的问题。</p>
+
+<p>这(可观察性)应该是我们编写代码中其中的一个属性，就像易用性、高可用性和稳定性一样。设计和构建“可观察”在于，确保在运行时，负责操作它的人员能够检测到不良行为（例如，服务停机、错误、响应缓慢），并拥有可操作的信息以有效地确定根本原因（例如，详细的事件日志、细粒度的资源使用信息，以及应用程序跟踪）。</p>
+
+<p>这个目标看似平淡无奇，但在实现这一目标时会遇到诸多挑战，常见挑战包括：没有收集足够的信息；收集了太多信息，但没有提取出有指导意义的内容；这些信息分别存储在诸多不同的位置。</p>
+
+<p>下面来看如何化解这个难题。</p>
+
+<p>一段代码从产生到运行，大致要经过三个阶段：</p>
+
+<ol>
+<li>编写(人来做)</li>
+<li>编译(机器来做)</li>
+<li>运行(机器来做)</li>
+</ol>
+
+<p>在第一阶段和第二阶段中，不涉及到可观察性，所以重点是第三阶段-运行。</p>
+
+<p>众所周知，代码的运行本质是CPU通过读取不同的寄存器数据，进行加减乘除运算。 无论我们在代码中如何写的天花乱坠，到了CPU这一层，它只会做上面这几种运算。此时此刻，CPU掌控着全局，它拥有上帝视角，它知道任意一段代码计算的结果是什么，(很多时候，我们所谓的异常，错误等等对于CPU来说只是一种计算结果而已。&rdquo;对&rdquo;和&rdquo;错&rdquo;是我们&rdquo;自以为是&rdquo;的结果，这些结果再CPU眼里都是正确)。如果要做服务的可观察性，换个角度来说，就是要从CPU嘴里问出它知道而我们不知道的运算结果。</p>
+
+<p>如何问？</p>
+
+<p>直接的人机对话目前还只是存在于&lt;黑客帝国&gt;中，现实社会中，可能到产品下线，我们都不会有机会去腾讯云的IDC机房做个短暂的一日游。 机器都摸不到，更何况对话。</p>
+
+<p><img src="http://p3.pstatp.com/large/dfic-imagehandler/45520e2b-56ce-4c67-a033-e81306e42d2a" alt="" /></p>
+
+<p>那又该如何拿到运算结果呢？</p>
+
+<p>此刻可以换个维度来考虑这件事情。 既然不能直接从CPU拿到结果，那么我们可以通过哪些结果来侧面反映真实情况呢？ 就好比，如果不能拿到某个妹子的正面照，如果侧面特别Nice，那么正面也不会差到哪里去。同理，如果我们可以得知服务在某段时间内运行状态(例如消耗的CPU周期，消耗的内存大小，消耗的IO开销等等)，通过一定量的权重计算，也可以大致得出这个服务的优劣性。</p>
+
+<p>所以第一个侧面数据就是需要统计APM值。</p>
+
+<p>APM的反馈有两个途径，程序上报和旁路检测。</p>
+
+<p>程序上报就是自己计算，自己统计，自己上报。 这个方式的优点在于可以保证一定的计算深度(基于语言特性，哪些指标应该怎么计算，哪些指标有意义，程序自己应该是最清楚)。而缺点也显而易见，如果&rdquo;自己&rdquo;挂了，那什么都没有了。</p>
+
+<p>而旁路检测，就和sidecar一样，在程序的旁边站着一个监督者(和监考老师性质差不多)。 它来负责统计和计算指标数据。 作为第三方而言，它会最大程度的保证客观公正，但反过来说，它仅仅行使监督的作用，不会深入到程序内部。 因此程序内部做了什么事情，它是一无所知的。所以无法统计到更深层次的指标数据(例如到底哪行代码运行比较慢，它几乎没有任何可以探知的途径)。</p>
+
+<p>业界中目前最常用的方式就是两者结合。 主要依靠程序上报，但也会通过旁路监控做为辅助决策。</p>
+
+<p>稍微总结一下，我们需要APM来做什么事情：</p>
+
+<ul>
+<li>程序在哪个环节运行时间最长</li>
+<li>程序主要资源都消耗在了哪里</li>
+<li>程序之间是如何调用的</li>
+</ul>
+
+<p>第二个数据是：Metrice 指标</p>
+
+<p>这里的Metric特指的是特定时间周期内系统级指标数据，例如1分钟内CPU平均利用率，内存利用率和其它特定的指标。</p>
+
+<p>针对不同的语言，还可能会采集不同的指标。 例如对于Java而言，需要采集JVM的指标(GC次数，Heap Memory使用，Non-heap Memory使用等等)，而对于golang而言，需要采集goroutine 的当前数量、堆分配的累积数量，以及垃圾收集的耗时百分比等等数据。</p>
+
+<p>所以此阶段的结论是：Metrics应该是系统级数据(80%)+语言特定数据(20%)。</p>
+
+<p>而最后一个数据则是：日志。</p>
+
+<p>日志是排查问题的首要手段，也是性价比最高的手段(普遍而言，问题分为两类：业务问题和性能问题。 日志对于解决业务问题是最有效的，性能问题则未必)。</p>
+
+<p>一般而言，日志内容应该需要局限在组件级别，也就是一行日志或者上下几行关联的日志应该是同一个组件内的活动，而不应该跨组件。应该从组件角度来查看日志，而不是从全局角度来看日志(例如应该看用户在登录过程做了哪些事情，而不是看每个组件中这个用户都做了什么事情)。</p>
+
+<p>对于人而言，日志是最容易理解的(日志本来就是给人来看的)。 所以从这个角度来说，日志的格式应该是越简单越好，最好不需要人脑在做多余的加工(例如使用嵌套层次很深的json格式，或者使用很乱的分隔符进行字段分割)。</p>
+
+<p>与此同时，日志是严格基于时序而产生的(这是日志的客观属性，因为代码是严格按照时序执行的)。 所以使用一个时序数据库来保存日志是一个不错的选择。 例如使用Elasticsearch保存日志。</p>
+
+<p>至此，我们得出了实现服务可观察性的三个要素：</p>
+
+<ol>
+<li>APM</li>
+<li>Metric</li>
+<li>Logs</li>
+</ol>
+
+<p>这三者需要相辅相成，才能相对完整的从侧面来反映一个服务的真实情况。 通过APM来探知服务内部的运行情况， 而通过Metric来验证外部运行环境，最后通过Logs来辅助人来预测代码行为和验证运行结果。</p>
+
+<p>上述三要素并非万能，在软件开发领域没有所谓的“银弹”。 一种方案好与不好，更多的取决于实施的客观环境是否与此方案想匹配，须知最终掌握方案落地质量的仍然是人！</p>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
